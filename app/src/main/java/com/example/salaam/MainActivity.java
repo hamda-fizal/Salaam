@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         void login() {
                             if(mAuth.getCurrentUser()!=null) {
                                 Intent intent = new Intent(this, UserListActivity.class);
-                         //       intent.putExtra("username",usernameEditText.getText().toString().trim());
+                            intent.putExtra("username",usernameEditText.getText().toString().trim());
                                 startActivity(intent);
                             }
                             else

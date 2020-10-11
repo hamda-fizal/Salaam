@@ -9,7 +9,10 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +28,8 @@ public class UserListActivity extends AppCompatActivity {
     ArrayAdapter arrayAdapter;
     ArrayList<String> users = new ArrayList<>();
     DatabaseReference userRef;
-    String email;
+    FirebaseUser currentUser;
+    String email,username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,22 +39,24 @@ public class UserListActivity extends AppCompatActivity {
         userListView.setAdapter(arrayAdapter);
         setTitle("User List");
         users.clear();
-     //   Intent intent =getIntent();
-     //   String username= intent.getStringExtra("username");
-      //  Log.i("KittiyeUsername",username);
-        //mAuth=FirebaseAuth.getInstance();
-        //  currentUser =mAuth.getCurrentUser();
-        //    assert currentUser != null;
-        //   final String uid=currentUser.getUid();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) 
+            username = extras.getString("username");
+
         userRef= FirebaseDatabase.getInstance().getReference().child("users");
         userRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 //     if(!uid.equals(snapshot.getValue(String.class))) {
                 email = snapshot.child("email id").getValue(String.class);
-                if (!email.equals("null"))
+               // id= snapshot.child("uid").getValue(String.class);
+              //  assert id != null;
+               // Log.i("hahaa",id);
+                if (!email.equals("null")&&!email.equals(username)) {
                     users.add(email);
-                arrayAdapter.notifyDataSetChanged();
+                    arrayAdapter.notifyDataSetChanged();
+
+                }
                 Log.i("email", "blaaaaaaaaa");
 
             }
