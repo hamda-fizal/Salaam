@@ -53,7 +53,10 @@ public class MainActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         //Add to database
-                                            FirebaseDatabase.getInstance().getReference().child("users").child(Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid()).child("email id").setValue(usernameEditText.toString());
+                                            FirebaseDatabase
+                                                    .getInstance()
+                                                    .getReference()
+                                                    .child("users").child(task.getResult().getUser().getUid()).child("email id").setValue(usernameEditText.getText().toString());
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.i("Login","Success");
                                         login();
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         void login() {
                             if(mAuth.getCurrentUser()!=null) {
                                 Intent intent = new Intent(this, UserListActivity.class);
+                         //       intent.putExtra("username",usernameEditText.getText().toString().trim());
                                 startActivity(intent);
                             }
                             else
