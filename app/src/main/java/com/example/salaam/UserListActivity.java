@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -28,32 +29,40 @@ public class UserListActivity extends AppCompatActivity {
     ArrayAdapter arrayAdapter;
     ArrayList<String> users = new ArrayList<>();
     DatabaseReference userRef;
-    FirebaseUser currentUser;
-    String email,username;
+    String currentUserId,uid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
         ListView userListView=(ListView)findViewById(R.id.userListView);
+
+        userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                intent.putExtra("ActiveUser",users.get(position));
+
+                startActivity(intent);
+            }
+        });
+
         arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,users);
         userListView.setAdapter(arrayAdapter);
         setTitle("User List");
         users.clear();
         Bundle extras = getIntent().getExtras();
-        if (extras != null) 
-            username = extras.getString("username");
-
+        if (extras != null)
+            uid = extras.getString("uid");
+        Toast.makeText(this,uid,Toast.LENGTH_SHORT).show();
         userRef= FirebaseDatabase.getInstance().getReference().child("users");
         userRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                //     if(!uid.equals(snapshot.getValue(String.class))) {
-                email = snapshot.child("email id").getValue(String.class);
-               // id= snapshot.child("uid").getValue(String.class);
-              //  assert id != null;
-               // Log.i("hahaa",id);
-                if (!email.equals("null")&&!email.equals(username)) {
-                    users.add(email);
+
+                currentUserId = snapshot.child("uid").getValue(String.class);
+                 if (!currentUserId.equals("null")||!currentUserId.equals(uid)) {
+                    users.add(currentUserId);
                     arrayAdapter.notifyDataSetChanged();
 
                 }

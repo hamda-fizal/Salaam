@@ -6,4 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".ChatActivity">
 
+    <ListView
+        android:id="@+id/messagesListView"
+        android:layout_width="391dp"
+        android:layout_height="670dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <LinearLayout
+        android:id="@+id/layout_chatbox"
+        android:layout_width="397dp"
+        android:layout_height="52dp"
+        android:background="#ffffff"
+        android:minHeight="48dp"
+        android:orientation="horizontal"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:paddingBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <EditText
+            android:id="@+id/chatboxEditText"
+            android:layout_width="268dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Type message"
+            android:inputType="textLongMessage|textMultiLine"
+            android:maxLines="6"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+
+        <ImageButton
+            android:id="@+id/sendButton"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="sendMessage"
+            app:srcCompat="@drawable/send_vector" />
+
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
