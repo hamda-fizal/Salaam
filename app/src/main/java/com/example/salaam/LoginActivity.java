@@ -74,8 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
    public void sendUserToLoginPage(String email){
         if(mAuth.getCurrentUser()!=null) {
-            Intent intent = new Intent(this, UserListActivity.class);
-            intent.putExtra("username",email);
+            Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();

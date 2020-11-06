@@ -101,8 +101,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     void login(String uid){
         if(mAuth.getCurrentUser()!=null) {
-            Intent intent = new Intent(this, UserListActivity.class);
-            intent.putExtra("uid",uid);
+            Intent intent = new Intent(this, HomeActivity.class);
+       //     intent.putExtra("uid",uid);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();

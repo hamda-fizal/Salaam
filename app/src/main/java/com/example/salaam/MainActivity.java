@@ -38,7 +38,7 @@ protected void onStart() {
         finish();
     }
     else{
-        Intent intent =new Intent(this,LoginActivity.class);
+        Intent intent =new Intent(this,RegisterActivity.class);
         startActivity(intent);
         finish();
 
