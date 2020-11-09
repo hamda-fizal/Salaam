@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference userRef;
     public void login(View view){
         final String password,email;
+        signUpButton.setClickable(false);
         password=passwordEditText.getText().toString().trim();
         email=emailEditText.getText().toString().trim();
 
@@ -57,9 +58,11 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+
                                 Log.i("Login", "Success");
                                 sendUserToLoginPage(email);
                             } else {
+                                signUpButton.setClickable(true);
                                 if (email.isEmpty())
                                     Toast.makeText(LoginActivity.this, "Email or password field is empty", Toast.LENGTH_LONG).show();
                                 if (task.getException() instanceof FirebaseAuthInvalidUserException)

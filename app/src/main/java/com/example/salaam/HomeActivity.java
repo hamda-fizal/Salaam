@@ -103,6 +103,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this,LoginActivity.class));
                 finish();
                 return true;
+            case R.id.profile:
+                startActivity(new Intent(HomeActivity.this,MyProfileActivity.class));
+                return true;
         }
         return false;
     }

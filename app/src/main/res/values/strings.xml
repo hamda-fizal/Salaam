@@ -4,4 +4,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="username">Username</string>
     <string name="wa_alaikumassalam">Wa alaikumassalam</string>
+    <string name="myprofile">MyProfile</string>
+    <string name="myProfile">myProfile</string>
+    <string name="MyProfile">MyProfile</string>
+    <string name="my_profile">My Profile</string>
 </resources>
