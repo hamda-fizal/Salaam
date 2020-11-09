@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.salaam.Fragment.ChatsFragment;
+import com.example.salaam.Fragment.ChatFragment;
 import com.example.salaam.Fragment.UsersFragment;
 import com.example.salaam.model.User;
 import com.google.android.material.tabs.TabLayout;
@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
 
         ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager(),FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        viewPagerAdapter.addFragment(new ChatsFragment(),"Chats");
+        viewPagerAdapter.addFragment(new ChatFragment(),"Chats");
         viewPagerAdapter.addFragment(new UsersFragment(),"Users");
 
         viewPager.setAdapter(viewPagerAdapter);

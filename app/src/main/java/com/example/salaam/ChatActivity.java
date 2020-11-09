@@ -3,6 +3,8 @@ package com.example.salaam;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,18 +13,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.example.salaam.Adapter.ChatAdapter;
+import com.example.salaam.model.Chat;
 import com.example.salaam.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -31,23 +40,55 @@ public class ChatActivity extends AppCompatActivity {
 
     CircleImageView displayPicture;
     TextView usernameTextView;
-
-    FirebaseUser firebaseUser;
-    DatabaseReference ref;
-    Intent intent;
-
-
-
-//    ArrayList<String> messages=new ArrayList<>();
-  //  ArrayAdapter<String> arrayAdapter;
     EditText chatBoxEditText;
     ImageButton sendButton;
 
+    ChatAdapter chatAdapter;
+    List<Chat> chats;
+
+
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+
+    FirebaseUser firebaseUser;
+    DatabaseReference ref;
+    DatabaseReference chatref;
+    Intent intent;
+
+    private String uid;
+
+
     public void sendMessage(View view){
-        //if(!chatBoxEditText.getText().toString().trim().equals("")){
-        //    messages.add(chatBoxEditText.getText().toString().trim());
-      //      arrayAdapter.notifyDataSetChanged();
-     //   }
+
+            final String message=chatBoxEditText.getText().toString();
+
+        if(!message.trim().isEmpty()){
+            String sender=firebaseUser.getUid();
+            final String receiver=uid;
+            DatabaseReference reference=FirebaseDatabase.getInstance().getReference();
+            HashMap<String,Object> hashMap=new HashMap<>();
+            hashMap.put("sender",sender);
+            hashMap.put("receiver",receiver);
+            hashMap.put("message",message);
+            reference.child("Chats").push().setValue(hashMap);
+
+            chatref=FirebaseDatabase.getInstance().getReference("ChatList").child(sender).child(receiver);
+            chatref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(!snapshot.exists())
+                        chatref.child("id").setValue(receiver);
+                       // chatref.child("id").child("message").setValue(message);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+        chatBoxEditText.setText("");
     }
 
 
@@ -67,15 +108,24 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        recyclerView=findViewById(R.id.recyclerView);
+
+        recyclerView.setHasFixedSize(true);
+        linearLayoutManager=new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        chats=new ArrayList<>();
+
         displayPicture=findViewById(R.id.displayPicture);
         usernameTextView=findViewById(R.id.username);
-        chatBoxEditText=(EditText)findViewById(R.id.chatboxEditText);
-        sendButton=(ImageButton)findViewById(R.id.sendButton);
+        chatBoxEditText= findViewById(R.id.chatboxEditText);
+        sendButton= findViewById(R.id.sendButton);
 
 
 
         intent=getIntent();
-        String uid=intent.getStringExtra("uid");
+        uid=intent.getStringExtra("uid");
 
 
         firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
@@ -86,13 +136,17 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 User user=snapshot.getValue(User.class);
-                if(user.getUsername()!=null) {
+                try {
+                    assert user != null;
                     usernameTextView.setText(user.getUsername());
-                    if (user.getImageURL().equals("default")) {
-                        displayPicture.setImageResource(R.drawable.displaypicture);
-                    } else {
+                    if (!user.getImageURL().equals("default")) {
                         Glide.with(ChatActivity.this).load(user.getImageURL()).into(displayPicture);
                     }
+
+                    readMessages(firebaseUser.getUid(),uid,user.getImageURL());
+
+                }catch (DatabaseException e){
+                    Toast.makeText(ChatActivity.this,"Error while updating messages",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -101,5 +155,48 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    public void readMessages(final String sender, final String receiver, final String imageURL){
+
+        ref=FirebaseDatabase.getInstance().getReference("Chats");
+      ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                chats.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                    Chat chat=dataSnapshot.getValue(Chat.class);
+
+                        assert chat != null;
+                        if (chat.getSender().equals(sender) && chat.getReceiver().equals(receiver)
+                                || chat.getSender().equals(receiver) && chat.getReceiver().equals(sender))
+                            chats.add(chat);
+
+                    chatAdapter = new ChatAdapter(ChatActivity.this, chats, imageURL);
+                    recyclerView.setAdapter(chatAdapter);
+
+                }
+
+                    }catch (Exception e){
+                    Toast.makeText(ChatActivity.this,"Error while retrieving messages",Toast.LENGTH_SHORT).show();
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+                Toast.makeText(ChatActivity.this,error.toString(),Toast.LENGTH_SHORT).show();
+
+            }
+      });
+
+
     }
 }

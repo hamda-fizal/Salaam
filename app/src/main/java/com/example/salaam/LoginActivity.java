@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.getException() instanceof FirebaseAuthInvalidUserException)
                                     Toast.makeText(LoginActivity.this, "Email id does not exist", Toast.LENGTH_SHORT).show();
                                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException)
-                                    Toast.makeText(LoginActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, "Wrong email or Password", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

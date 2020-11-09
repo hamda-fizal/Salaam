@@ -10,7 +10,9 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/appBarLayout"
+        app:liftOnScroll="false">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -22,6 +24,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:src="@drawable/displaypicture"
                 android:id="@+id/displayPicture" />
             <TextView
                 android:layout_width="wrap_content"
@@ -35,45 +38,44 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/recyclerView"
+    android:layout_below="@id/appBarLayout"
+    android:layout_above="@id/layoutChatbox"/>
 
-    <LinearLayout
-        android:id="@+id/layout_chatbox"
-        android:layout_width="397dp"
-        android:layout_height="52dp"
+    <RelativeLayout
+        android:id="@+id/layoutChatbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="13dp"
-        android:background="#ffffff"
-        android:minHeight="48dp"
-        android:orientation="horizontal"
-        android:paddingTop="1dp"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:paddingBottom="1dp">
+        android:background="#fff"
+        android:padding="5dp"
+        android:paddingBottom="10dp">
 
         <EditText
             android:id="@+id/chatboxEditText"
-            android:layout_width="268dp"
-            android:layout_height="38dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:hint="Type message"
+            android:hint="Type your message"
+            android:layout_toStartOf="@id/sendButton"
+            android:layout_centerVertical="true"
             android:inputType="textLongMessage|textMultiLine"
-            android:maxLines="6"
             android:textSize="16sp"
+            android:layout_marginEnd="20dp"
             tools:ignore="HardcodedText" />
 
         <ImageButton
             android:id="@+id/sendButton"
-            android:layout_width="5dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
             android:onClick="sendMessage"
-            app:srcCompat="@drawable/send_vector" />
+            android:background="@drawable/sendimageasset" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
