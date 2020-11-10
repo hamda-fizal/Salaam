@@ -74,8 +74,24 @@ public class ChatFragment extends Fragment {
 
             }
         });
+    /*    reference=FirebaseDatabase.getInstance().getReference("ChatList").child("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    ChatList chatList=dataSnapshot.
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        })
 
 
+    */
 
         return view;
     }
@@ -96,6 +112,7 @@ public class ChatFragment extends Fragment {
 
                     userAdapter = new UserAdapter(getContext(), users);
                     recyclerView.setAdapter(userAdapter);
+                    userAdapter.notifyDataSetChanged();
                 }
             }
             @Override

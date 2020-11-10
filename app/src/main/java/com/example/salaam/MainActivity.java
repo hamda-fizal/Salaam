@@ -30,19 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
 protected void onStart() {
     super.onStart();
-    firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
-    if(firebaseUser!=null) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        finish();
-    }
-    else{
-        Intent intent =new Intent(this,RegisterActivity.class);
-        startActivity(intent);
-        finish();
-
-    }
 }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +38,19 @@ protected void onStart() {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("");
+        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
+        if(firebaseUser!=null) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else{
+            Intent intent =new Intent(this,RegisterActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
       }
 
 

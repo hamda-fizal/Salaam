@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(!snapshot.exists())
                         chatref.child("id").setValue(receiver);
-                       // chatref.child("id").child("message").setValue(message);
+
                 }
 
                 @Override
@@ -181,12 +181,13 @@ public class ChatActivity extends AppCompatActivity {
                     Chat chat=dataSnapshot.getValue(Chat.class);
 
                         assert chat != null;
-                        if (chat.getSender().equals(sender) && chat.getReceiver().equals(receiver)
-                                || chat.getSender().equals(receiver) && chat.getReceiver().equals(sender))
+                        if ((chat.getSender().equals(sender) && chat.getReceiver().equals(receiver))
+                                || (chat.getSender().equals(receiver) && chat.getReceiver().equals(sender)))
                             chats.add(chat);
 
                     chatAdapter = new ChatAdapter(ChatActivity.this, chats, imageURL);
                     recyclerView.setAdapter(chatAdapter);
+                    chatAdapter.notifyDataSetChanged();
 
                 }
 

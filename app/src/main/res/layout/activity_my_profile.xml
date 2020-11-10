@@ -85,6 +85,8 @@
         android:orientation="horizontal"
         android:id="@+id/line1"
         android:onClick="changeDP"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/item_selector"
         android:clickable="true"
         android:focusable="true">
 
@@ -110,7 +112,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/line1"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/item_selector"
         android:focusableInTouchMode="true"
         android:onClick="editUsername">
 
