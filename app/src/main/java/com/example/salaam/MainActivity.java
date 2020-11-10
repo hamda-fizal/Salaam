@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
 protected void onStart() {
     super.onStart();
     firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+
     if(firebaseUser!=null) {
         Intent intent = new Intent(this, HomeActivity.class);
-        //  intent.putExtra("username",firebaseUser.getEmail());
         startActivity(intent);
         finish();
     }
@@ -46,6 +46,7 @@ protected void onStart() {
 }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("");
