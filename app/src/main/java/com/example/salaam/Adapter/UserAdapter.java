@@ -25,10 +25,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
     private List<User> mUsers;
+    private boolean isFriend;
 
-    public UserAdapter(Context mcontext,List<User> mUsers){
+    public UserAdapter(Context mcontext,List<User> mUsers,boolean isFriend){
         this.mContext=mcontext;
         this.mUsers=mUsers;
+        this.isFriend=isFriend;
+
     }
 
     @NonNull
@@ -50,6 +53,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             Glide.with(mContext).load(user.getImageURL()).into(holder.displayPicture);
         }
 
+        if(isFriend){
+            if(user.getStatus().equals("online")){
+                holder.on.setVisibility(View.VISIBLE);
+
+            }else {
+                holder.on.setVisibility(View.GONE);
+            }
+
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,12 +81,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public TextView usernameTextView;
         public ImageView displayPicture;
+        private ImageView on;
+
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             usernameTextView= itemView.findViewById(R.id.usernameTextView);
             displayPicture=itemView.findViewById(R.id.displayPicture);
+            on=itemView.findViewById(R.id.on);
+
         }
     }
 

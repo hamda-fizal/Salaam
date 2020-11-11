@@ -80,7 +80,7 @@ public class UsersFragment extends Fragment {
                     }
                 }
                 firebaseCallback.onCallback(mUsers);
-                userAdapter = new UserAdapter(getContext(), mUsers);
+                userAdapter = new UserAdapter(getContext(), mUsers,false);
                 recyclerView.setAdapter(userAdapter);
                 userAdapter.notifyDataSetChanged();
             }

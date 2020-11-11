@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.salaam.Adapter.UserAdapter;
 import com.example.salaam.R;
@@ -54,8 +55,8 @@ public class ChatFragment extends Fragment {
        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
        userIds=new ArrayList<>();
-
-        reference=FirebaseDatabase.getInstance().getReference("ChatList").child(firebaseUser.getUid());
+        final String currentUid=firebaseUser.getUid();
+      /*  reference=FirebaseDatabase.getInstance().getReference("ChatList").child(currentUid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -65,7 +66,7 @@ public class ChatFragment extends Fragment {
                     ChatList chatList=dataSnapshot.getValue(ChatList.class);
                     userIds.add(chatList);
                 }
-                readChats();
+
             }
 
 
@@ -74,24 +75,50 @@ public class ChatFragment extends Fragment {
 
             }
         });
-    /*    reference=FirebaseDatabase.getInstance().getReference("ChatList").child("Chats");
+        readChats();
+*/
+        final List<String> stringUids = new ArrayList<>();
+        for(int i=0;i<userIds.size();i++){
+            stringUids.add(userIds.get(i).getId());
+        }
+        reference=FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userIds.clear();
                 for (DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    ChatList chatList=dataSnapshot.
 
+                    String receiverId=dataSnapshot.child("receiver").getValue(String.class);
+                    String senderId=dataSnapshot.child("sender").getValue(String.class);
+
+                    if(receiverId.equals(currentUid)){
+
+                    assert receiverId != null;
+                    ChatList chatList=new ChatList(senderId);
+                    if(!stringUids.contains(senderId))
+                        userIds.add(chatList);
+                    }
+                    else if(senderId.equals(currentUid)){
+                        assert senderId != null;
+                        ChatList chatList=new ChatList(receiverId);
+                        if(!stringUids.contains(receiverId))
+                            userIds.add(chatList);
+
+                    }
                 }
+                readChats();
+
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        })
+        });
 
 
-    */
+
 
         return view;
     }
@@ -110,7 +137,7 @@ public class ChatFragment extends Fragment {
                             users.add(user);
                     }
 
-                    userAdapter = new UserAdapter(getContext(), users);
+                    userAdapter = new UserAdapter(getContext(), users,true);
                     recyclerView.setAdapter(userAdapter);
                     userAdapter.notifyDataSetChanged();
                 }
